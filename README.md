@@ -23,7 +23,7 @@ https://raw.githubusercontent.com/shixuit/venera-next-manwa-me-source/main/manwa
 
 - 源预置“最近更新”“韩国 BL”“韩国漫画”入口；“韩国 BL”对应站点的 `gender=0&area=2` 筛选。
 - 分类页支持标签、受众、地区、连载状态和排序筛选。
-- 如果加载提示 Cloudflare 验证，在该源的账号设置中点击「登录」，使用内置浏览器完成验证；也可以手动填写浏览器中的 `cf_clearance` Cookie。
+- 如果加载提示 Cloudflare 验证，在该源的账号设置中点击「登录」。内置浏览器会停留在分类页，完成验证并加载该页后才会自动返回；也可以手动填写浏览器中的 `cf_clearance` Cookie。
 - 站点会更换域名。可在该源的“站点地址”设置中以英文逗号填写多个地址，首个为优先地址。
 
 ## 免责声明

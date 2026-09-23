@@ -7,6 +7,9 @@ const MANWA_DEFAULT_BASE_URLS = [
   "http://manwara.cc",
 ];
 
+const MANWA_LOGIN_URL =
+  "https://manwa.me/booklist?tag=&end=&gender=0&has_full=-1&area=2&sort=-1&level=-1";
+
 const MANWA_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
   "AppleWebKit/537.36 (KHTML, like Gecko) " +
@@ -17,7 +20,7 @@ class ManwaMe extends ComicSource {
 
   key = "manwa_me";
 
-  version = "1.0.1";
+  version = "1.0.2";
 
   minAppVersion = "1.4.6";
 
@@ -35,11 +38,14 @@ class ManwaMe extends ComicSource {
   };
 
   account = {
-    // manwa.me 使用 Cloudflare 时，可从漫画源的“登录”入口完成验证。
+    // 只在受保护的分类页加载完成后才结束 WebView，避免主页刚打开就误判为登录成功。
     loginWithWebview: {
-      url: "https://manwa.me",
+      url: MANWA_LOGIN_URL,
       checkStatus: (url, title) => {
         if (!url || !title) return false;
+        if (!/^https:\/\/manwa\.me\/booklist(?:[/?#]|$)/i.test(url)) {
+          return false;
+        }
         const value = title.toLowerCase();
         if (
           value.indexOf("just a moment") !== -1 ||
@@ -48,7 +54,7 @@ class ManwaMe extends ComicSource {
         ) {
           return false;
         }
-        return url.indexOf("manwa.me") !== -1;
+        return true;
       },
     },
 
