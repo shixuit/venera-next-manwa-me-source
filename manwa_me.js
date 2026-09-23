@@ -17,13 +17,13 @@ class ManwaMe extends ComicSource {
 
   key = "manwa_me";
 
-  version = "1.0.0";
+  version = "1.0.1";
 
   minAppVersion = "1.4.6";
 
   // 发布仓库中的更新地址。
   url =
-    "https://cdn.jsdelivr.net/gh/shixuit/venera-next-manwa-me-source@main/manwa_me.js";
+    "https://raw.githubusercontent.com/shixuit/venera-next-manwa-me-source/main/manwa_me.js";
 
   settings = {
     base_urls: {
@@ -178,7 +178,7 @@ class ManwaMe extends ComicSource {
     return result || fallback;
   }
 
-  _parseJsonComic(item) {
+  _parseJsonComic(item, baseUrl) {
     const status = Number(item.end) === 1 ? "已完结" : "连载中";
     const tags = String(item.tags || "")
       .split("|")
@@ -188,7 +188,7 @@ class ManwaMe extends ComicSource {
       id: String(item.param || item.id),
       title: String(item.book_name || ""),
       subTitle: [status, item.last_chapter || ""].filter(Boolean).join(" · "),
-      cover: String(item.cover_url || ""),
+      cover: this._absoluteUrl(item.cover_url || "", baseUrl),
       tags,
       description: String(item.summary || ""),
       language: "zh-Hans",
@@ -215,7 +215,10 @@ class ManwaMe extends ComicSource {
     const query = Object.keys(values)
       .map((key) => key + "=" + encodeURIComponent(String(values[key])))
       .join("&");
-    const { response } = await this._request("/getBooks?" + query, true);
+    const { response, baseUrl } = await this._request(
+      "/getBooks?" + query,
+      true,
+    );
 
     let data;
     try {
@@ -231,7 +234,7 @@ class ManwaMe extends ComicSource {
     return {
       comics: books
         .filter((item) => item && !item.blocked)
-        .map((item) => this._parseJsonComic(item)),
+        .map((item) => this._parseJsonComic(item, baseUrl)),
       maxPage: books.length < 12 ? Number(page || 1) : null,
     };
   }
@@ -508,10 +511,8 @@ class ManwaMe extends ComicSource {
     },
 
     loadEp: async (comicId, epId) => {
-      // 编码路径分隔符可绕开部分网络对明文 /chapter/ 路径的错误拦截；
-      // %2F 属于保留字符，HTTP 客户端不会像普通字母那样提前规范化。
       const { response, baseUrl } = await this._request(
-        "/chapter%2F" + encodeURIComponent(epId),
+        "/chapter/" + encodeURIComponent(epId),
         false,
       );
       const document = new HtmlDocument(response.body);

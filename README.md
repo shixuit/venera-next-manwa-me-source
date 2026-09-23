@@ -4,7 +4,10 @@
 
 ## 安装
 
-在 Venera-Next 打开「漫画源 → 源仓库 → 添加仓库」，填写以下地址：
+在 Venera-Next 打开「漫画源 → 源仓库 → 添加仓库」，填写：
+
+- 名称：`漫蛙漫画源`
+- 地址：
 
 ```text
 https://raw.githubusercontent.com/shixuit/venera-next-manwa-me-source/main/index.json
@@ -13,7 +16,7 @@ https://raw.githubusercontent.com/shixuit/venera-next-manwa-me-source/main/index
 保存后，在「浏览漫画源」中安装「漫蛙漫画」。也可以在「已安装 → 通过链接安装」中填写：
 
 ```text
-https://cdn.jsdelivr.net/gh/shixuit/venera-next-manwa-me-source@main/manwa_me.js
+https://raw.githubusercontent.com/shixuit/venera-next-manwa-me-source/main/manwa_me.js
 ```
 
 ## 使用说明
